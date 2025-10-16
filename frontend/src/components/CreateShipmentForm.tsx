@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     useWriteContract,
     useWaitForTransactionReceipt,
 } from "wagmi";
 import { logisticsEventsModuleLogisticsEventsAbi, logisticsEventsModuleLogisticsEventsAddress } from "../generated";
+import { decodeEventLog } from "viem";
 
 const contractAddress = logisticsEventsModuleLogisticsEventsAddress[420420422];
 
@@ -30,8 +31,37 @@ export function CreateShipmentForm() {
             enabled: !!txHash,
         },
     });
+    const [shipmentId, setShipmentId] = useState<bigint | null>(null);
 
     const { writeContract, isPending, error } = useWriteContract();
+
+    useEffect(() => {
+        if (!receipt) return;
+
+        try {
+            for (const log of receipt.logs) {
+                if (log.address.toLowerCase() === contractAddress.toLowerCase()) {
+                    try {
+                        const decoded = decodeEventLog({
+                            abi: logisticsEventsModuleLogisticsEventsAbi,
+                            data: log.data,
+                            topics: log.topics,
+                        });
+
+                        if (decoded.eventName === "ShipmentCreated") {
+                            const id = decoded.args.shipmentId as bigint;
+                            setShipmentId(id);
+                            break;
+                        }
+                    } catch (err) {
+                        // Skip logs that can't be decoded
+                    }
+                }
+            }
+        } catch (err) {
+            console.error("Error decoding ShipmentCreated event:", err);
+        }
+    }, [receipt]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -186,6 +216,12 @@ export function CreateShipmentForm() {
             {receipt && (
                 <p className="text-green-600 mt-4 font-semibold">
                     ✅ Shipment created in block #{receipt.blockNumber.toString()}!
+                    {shipmentId !== null && (
+                        <>
+                            <br />
+                            📦 Shipment ID: {shipmentId.toString()}
+                        </>
+                    )}
                 </p>
             )}
             {error && (
