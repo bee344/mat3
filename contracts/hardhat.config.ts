@@ -12,11 +12,6 @@ const config: HardhatUserConfig = {
       },
     },
   },
-  resolc: {
-    settings:{
-      viaIR: true
-    }
-  },
   networks: {
     hardhat: {
       polkadot: true,
@@ -31,7 +26,7 @@ const config: HardhatUserConfig = {
     polkadotHubTestnet: {
       polkadot: true,
       url: "https://testnet-passet-hub-eth-rpc.polkadot.io",
-      accounts: ["fb0ba23e5b86327532457879bbf23edccc77acd10cdd244b038d3b349076837b"]
+      accounts: [vars.get("PRIVATE_KEY")]
     }
   }
 };

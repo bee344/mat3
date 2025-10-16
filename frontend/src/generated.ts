@@ -56,57 +56,21 @@ export const logisticsEventsModuleLogisticsEventsAbi = [
         indexed: true,
       },
       {
-        name: 'weight',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'price',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
         name: 'batch',
         internalType: 'uint256',
         type: 'uint256',
         indexed: true,
       },
       {
-        name: 'origin',
-        internalType: 'string',
-        type: 'string',
-        indexed: false,
-      },
-      {
-        name: 'sender',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'receiver',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'destination',
-        internalType: 'string',
-        type: 'string',
-        indexed: false,
-      },
-      {
-        name: 'description',
-        internalType: 'string',
-        type: 'string',
-        indexed: false,
-      },
-      {
         name: 'timestamp',
         internalType: 'uint256',
         type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'stage',
+        internalType: 'enum LogisticsEvents.ShipmentStage',
+        type: 'uint8',
         indexed: false,
       },
     ],
@@ -123,25 +87,62 @@ export const logisticsEventsModuleLogisticsEventsAbi = [
         indexed: true,
       },
       {
-        name: 'status',
-        internalType: 'enum LogisticsEvents.ShipmentStatus',
-        type: 'uint8',
-        indexed: true,
-      },
-      {
-        name: 'updatedBy',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'timestamp',
+        name: 'weight',
         internalType: 'uint256',
         type: 'uint256',
         indexed: false,
       },
+      {
+        name: 'price',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'description',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
     ],
-    name: 'ShipmentStatusChanged',
+    name: 'ShipmentDetails',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'shipmentId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'originLat',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+      {
+        name: 'originLong',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+      {
+        name: 'destLat',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+      {
+        name: 'destLong',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+    ],
+    name: 'ShipmentLocation',
   },
   {
     type: 'event',
@@ -166,39 +167,77 @@ export const logisticsEventsModuleLogisticsEventsAbi = [
         indexed: false,
       },
       {
+        name: 'description',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+    ],
+    name: 'ShipmentUpdateDetails',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'shipmentId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'originLat',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+      {
+        name: 'originLong',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+      {
+        name: 'destLat',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+      {
+        name: 'destLong',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+    ],
+    name: 'ShipmentUpdateLocation',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'shipmentId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
         name: 'batch',
         internalType: 'uint256',
         type: 'uint256',
         indexed: true,
       },
       {
-        name: 'origin',
-        internalType: 'string',
-        type: 'string',
+        name: 'timestamp',
+        internalType: 'uint256',
+        type: 'uint256',
         indexed: false,
       },
       {
-        name: 'sender',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'receiver',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'destination',
-        internalType: 'string',
-        type: 'string',
-        indexed: false,
-      },
-      {
-        name: 'description',
-        internalType: 'string',
-        type: 'string',
+        name: 'stage',
+        internalType: 'enum LogisticsEvents.ShipmentStage',
+        type: 'uint8',
         indexed: false,
       },
       {
@@ -209,12 +248,6 @@ export const logisticsEventsModuleLogisticsEventsAbi = [
       },
       {
         name: 'previousShipmentId',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'timestamp',
         internalType: 'uint256',
         type: 'uint256',
         indexed: false,
@@ -244,20 +277,46 @@ export const logisticsEventsModuleLogisticsEventsAbi = [
         internalType: 'struct LogisticsEvents.ShipmentData',
         type: 'tuple',
         components: [
-          { name: 'shipmentId', internalType: 'uint256', type: 'uint256' },
           { name: 'weight', internalType: 'uint256', type: 'uint256' },
           { name: 'price', internalType: 'uint256', type: 'uint256' },
           { name: 'batch', internalType: 'uint256', type: 'uint256' },
-          { name: 'origin', internalType: 'string', type: 'string' },
-          { name: 'receiver', internalType: 'address', type: 'address' },
-          { name: 'destination', internalType: 'string', type: 'string' },
+          {
+            name: 'origin',
+            internalType: 'struct LogisticsEvents.Location',
+            type: 'tuple',
+            components: [
+              { name: 'longitud', internalType: 'string', type: 'string' },
+              { name: 'latitud', internalType: 'string', type: 'string' },
+            ],
+          },
+          {
+            name: 'destination',
+            internalType: 'struct LogisticsEvents.Location',
+            type: 'tuple',
+            components: [
+              { name: 'longitud', internalType: 'string', type: 'string' },
+              { name: 'latitud', internalType: 'string', type: 'string' },
+            ],
+          },
           { name: 'description', internalType: 'string', type: 'string' },
+          {
+            name: 'stage',
+            internalType: 'enum LogisticsEvents.ShipmentStage',
+            type: 'uint8',
+          },
         ],
       },
     ],
     name: 'createShipment',
-    outputs: [],
+    outputs: [{ name: 'id', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'nextShipmentId',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -272,13 +331,6 @@ export const logisticsEventsModuleLogisticsEventsAbi = [
     name: 'revokeProvider',
     outputs: [],
     stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'shipmentExists',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -300,14 +352,33 @@ export const logisticsEventsModuleLogisticsEventsAbi = [
             internalType: 'struct LogisticsEvents.ShipmentData',
             type: 'tuple',
             components: [
-              { name: 'shipmentId', internalType: 'uint256', type: 'uint256' },
               { name: 'weight', internalType: 'uint256', type: 'uint256' },
               { name: 'price', internalType: 'uint256', type: 'uint256' },
               { name: 'batch', internalType: 'uint256', type: 'uint256' },
-              { name: 'origin', internalType: 'string', type: 'string' },
-              { name: 'receiver', internalType: 'address', type: 'address' },
-              { name: 'destination', internalType: 'string', type: 'string' },
+              {
+                name: 'origin',
+                internalType: 'struct LogisticsEvents.Location',
+                type: 'tuple',
+                components: [
+                  { name: 'longitud', internalType: 'string', type: 'string' },
+                  { name: 'latitud', internalType: 'string', type: 'string' },
+                ],
+              },
+              {
+                name: 'destination',
+                internalType: 'struct LogisticsEvents.Location',
+                type: 'tuple',
+                components: [
+                  { name: 'longitud', internalType: 'string', type: 'string' },
+                  { name: 'latitud', internalType: 'string', type: 'string' },
+                ],
+              },
               { name: 'description', internalType: 'string', type: 'string' },
+              {
+                name: 'stage',
+                internalType: 'enum LogisticsEvents.ShipmentStage',
+                type: 'uint8',
+              },
             ],
           },
           {
@@ -324,29 +395,8 @@ export const logisticsEventsModuleLogisticsEventsAbi = [
       },
     ],
     name: 'updateShipment',
-    outputs: [],
+    outputs: [{ name: 'id', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'shipmentId', internalType: 'uint256', type: 'uint256' },
-      {
-        name: 'status',
-        internalType: 'enum LogisticsEvents.ShipmentStatus',
-        type: 'uint8',
-      },
-    ],
-    name: 'updateShipmentStatus',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'shipmentId', internalType: 'uint256', type: 'uint256' }],
-    name: 'verifyShipment',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
   },
 ] as const
 
@@ -354,7 +404,7 @@ export const logisticsEventsModuleLogisticsEventsAbi = [
  *
  */
 export const logisticsEventsModuleLogisticsEventsAddress = {
-  420420422: '0x2A8fa81e5f03340a8fF2A3Bc18Ec3B1743eD9015',
+  420420422: '0x9C8aFF47F478126d9862385b97774e809b4C53Da',
 } as const
 
 /**

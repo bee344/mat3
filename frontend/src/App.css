@@ -1,3 +1,5 @@
+@import "leaflet/dist/leaflet.css";
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -22,4 +24,26 @@
 
 p {
   padding: 0.5em;
+}
+
+@font-face {
+  font-family: 'Unbounded';
+  src: url('public/fonts/unbounded/WOFF/Unbounded-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Unbounded';
+  src: url('public/fonts/unbounded/WOFF/Unbounded-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Unbounded';
+  src: url('public/fonts/unbounded/WOFF/Unbounded-Regular.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+body {
+  font-family: 'Unbounded', sans-serif;
 }

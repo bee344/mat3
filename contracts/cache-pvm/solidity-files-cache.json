@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/bee344/Documentos/mat3/contracts/contracts/LogisticsTracking.sol": {
-      "lastModificationDate": 1760529505222,
-      "contentHash": "dccd9d8fbb72a0181a42ea1b3ec197a1",
+      "lastModificationDate": 1760551975395,
+      "contentHash": "a11a4d95f846c1a14d7a564b49496910",
       "sourceName": "contracts/LogisticsTracking.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -32,7 +32,6 @@
             "version": "latest",
             "compilerSource": "binary",
             "settings": {
-              "viaIR": true,
               "optimizer": {
                 "enabled": true,
                 "runs": 200

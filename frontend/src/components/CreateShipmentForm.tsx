@@ -3,22 +3,23 @@ import {
     useWriteContract,
     useWaitForTransactionReceipt,
 } from "wagmi";
-import { logisticsEventsModuleLogisticsEventsAbi } from "../generated"; // ABI must be exported from codegen
-import { logisticsEventsModuleLogisticsEventsAddress } from "../generated";
+import { logisticsEventsModuleLogisticsEventsAbi, logisticsEventsModuleLogisticsEventsAddress } from "../generated";
 
 const contractAddress = logisticsEventsModuleLogisticsEventsAddress[420420422];
 
 export function CreateShipmentForm() {
-    const [shipmentId, setShipmentId] = useState<bigint>();
     const [weight, setWeight] = useState<bigint>();
     const [price, setPrice] = useState<bigint>();
     const [batch, setBatch] = useState<bigint>();
-    const [origin, setOrigin] = useState<string>("");
-    const [receiver, setReceiver] = useState<string>("");
 
-    const receiverAddress = receiver as `0x${string}`;
-    const [destination, setDestination] = useState<string>("");
+    const [originLat, setOriginLat] = useState<string>("");
+    const [originLong, setOriginLong] = useState<string>("");
+
+    const [destinationLat, setDestinationLat] = useState<string>("");
+    const [destinationLong, setDestinationLong] = useState<string>("");
+
     const [description, setDescription] = useState<string>("");
+    const [stage, setStage] = useState<number>(0);
 
     const [txHash, setTxHash] = useState<`0x${string}` | undefined>(undefined);
 
@@ -35,7 +36,11 @@ export function CreateShipmentForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!shipmentId || !weight || !price || !batch || !origin || !receiver || !destination) {
+        if (
+            !weight || !price || !batch ||
+            !originLat || !originLong ||
+            !destinationLat || !destinationLong
+        ) {
             alert("Please fill in all required fields");
             return;
         }
@@ -48,20 +53,25 @@ export function CreateShipmentForm() {
                     functionName: "createShipment",
                     args: [
                         {
-                            shipmentId,
                             weight,
                             price,
                             batch,
-                            origin,
-                            receiver: receiverAddress,
-                            destination,
+                            origin: {
+                                latitud: originLat,
+                                longitud: originLong,
+                            },
+                            destination: {
+                                latitud: destinationLat,
+                                longitud: destinationLong,
+                            },
                             description,
+                            stage,
                         },
                     ],
                 },
                 {
-                    onSuccess: (data) => {
-                        setTxHash(data);
+                    onSuccess: (txHash) => {
+                        setTxHash(txHash);
                     },
                 }
             );
@@ -71,37 +81,119 @@ export function CreateShipmentForm() {
     };
 
     return (
-        <div className="max-w-md mx-auto p-4 border rounded bg-white shadow">
-            <h2 className="text-xl font-bold mb-4">Create Shipment</h2>
-            <form onSubmit={handleSubmit} className="space-y-3">
-                <input type="number" placeholder="Shipment ID" onChange={(e) => setShipmentId(BigInt(e.target.value))} required className="input" />
-                <input type="number" placeholder="Weight" onChange={(e) => setWeight(BigInt(e.target.value))} required className="input" />
-                <input type="number" placeholder="Price" onChange={(e) => setPrice(BigInt(e.target.value))} required className="input" />
-                <input type="number" placeholder="Batch" onChange={(e) => setBatch(BigInt(e.target.value))} required className="input" />
-                <input type="text" placeholder="Origin" onChange={(e) => setOrigin(e.target.value)} required className="input" />
-                <input type="text" placeholder="Destination" onChange={(e) => setDestination(e.target.value)} required className="input" />
-                <input type="text" placeholder="Receiver (0x...)" onChange={(e) => setReceiver(e.target.value)} required className="input" />
-                <textarea placeholder="Description (optional)" onChange={(e) => setDescription(e.target.value)} className="input" />
+        <div className="mx-auto p-6 border border-current rounded-lg shadow-lg max-w-full sm:max-w-lg text-left text-inherit bg-inherit">
+            <h2 className="text-2xl font-bold mb-6">Create Shipment</h2>
+            <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="flex flex-wrap gap-4">
+                    <input
+                        type="number"
+                        placeholder="Weight"
+                        onChange={(e) => setWeight(BigInt(e.target.value))}
+                        required
+                        className="flex-1 min-w-[120px] border border-current rounded-md px-4 py-2 placeholder-current shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input
+                        type="number"
+                        placeholder="Price"
+                        onChange={(e) => setPrice(BigInt(e.target.value))}
+                        required
+                        className="flex-1 min-w-[120px] border border-current rounded-md px-4 py-2 placeholder-current shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input
+                        type="number"
+                        placeholder="Batch"
+                        onChange={(e) => setBatch(BigInt(e.target.value))}
+                        required
+                        className="flex-1 min-w-[120px] border border-current rounded-md px-4 py-2 placeholder-current shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+
+                <div className="flex flex-wrap gap-4">
+                    <input
+                        type="text"
+                        placeholder="Origin Latitude"
+                        onChange={(e) => setOriginLat(e.target.value)}
+                        required
+                        className="flex-1 min-w-[140px] border border-current rounded-md px-4 py-2 placeholder-current shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Origin Longitude"
+                        onChange={(e) => setOriginLong(e.target.value)}
+                        required
+                        className="flex-1 min-w-[140px] border border-current rounded-md px-4 py-2 placeholder-current shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+
+                <div className="flex flex-wrap gap-4">
+                    <input
+                        type="text"
+                        placeholder="Destination Latitude"
+                        onChange={(e) => setDestinationLat(e.target.value)}
+                        required
+                        className="flex-1 min-w-[140px] border border-current rounded-md px-4 py-2 placeholder-current shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Destination Longitude"
+                        onChange={(e) => setDestinationLong(e.target.value)}
+                        required
+                        className="flex-1 min-w-[140px] border border-current rounded-md px-4 py-2 placeholder-current shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+
+                <textarea
+                    placeholder="Description (optional)"
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={4}
+                    className="w-full border border-current rounded-md px-4 py-2 placeholder-current shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+
+                <select
+                    onChange={(e) => setStage(Number(e.target.value))}
+                    className="w-full border border-current rounded-md px-4 py-2 placeholder-current shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    defaultValue={0}
+                >
+                    <option value={0}>Harvest</option>
+                    <option value={1}>Drying</option>
+                    <option value={2}>Grinding</option>
+                    <option value={3}>Blending</option>
+                    <option value={4}>Packaging</option>
+                    <option value={5}>Retail</option>
+                </select>
 
                 <button
                     type="submit"
                     disabled={isPending || isConfirming}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                    className="w-full bg-blue-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors duration-200 focus:outline-none focus:ring-4 focus:ring-blue-300"
                 >
-                    {isPending ? "Submitting..." : isConfirming ? "Confirming..." : "Create Shipment"}
+                    {isPending
+                        ? "Submitting..."
+                        : isConfirming
+                            ? "Confirming..."
+                            : "Create Shipment"}
                 </button>
             </form>
 
             {txHash && (
-                <div className="mt-4">
-                    <p>Transaction sent! Hash:</p>
-                    <code className="text-xs break-all">{txHash}</code>
+                <div className="mt-6">
+                    <p className="font-medium">Transaction sent! Hash:</p>
+                    <code className="text-xs break-all block mt-1 bg-gray-100 rounded px-2 py-1">
+                        {txHash}
+                    </code>
                 </div>
             )}
             {receipt && (
-                <p className="text-green-600 mt-2">✅ Shipment created successfully in block #{receipt.blockNumber.toString()}!</p>
+                <p className="text-green-600 mt-4 font-semibold">
+                    ✅ Shipment created in block #{receipt.blockNumber.toString()}!
+                </p>
             )}
-            {error && <p className="text-red-600 mt-2">❌ Error: {error.message}</p>}
+            {error && (
+                <p className="text-red-600 mt-4 font-semibold">❌ Error: {error.message}</p>
+            )}
         </div>
+
+
+
     );
 }

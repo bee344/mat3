@@ -7,4 +7,3 @@ const LogisticsEventsModule = buildModule("LogisticsEventsModule", (m) => {
 });
 
 export default LogisticsEventsModule;
-2
